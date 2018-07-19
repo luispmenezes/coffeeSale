@@ -16,10 +16,12 @@ import static com.luispmenezes.coffeesale.scrapper.GlobalConstants.DEFAULT_COFFE
 
 public class ContinenteScrapper implements GenericScrapper {
 
+    @Override
     public List<Listing> getListingsDefault() throws IOException {
         return getListings(GlobalConstants.DEFAULT_COFFEE_LIST, DEFAULT_COFFEE_BRAND);
     }
 
+    @Override
     public List<Listing> getListings(List<String> coffeeList, String coffeeBrand) throws IOException {
 
         List<Listing> listingList = new ArrayList<>();
