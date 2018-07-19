@@ -11,5 +11,6 @@ public class Constants {
     public static final String PRODUCT_TITLE_QUERY = ".ecsf_QuerySuggestions";
     public static final String PRODUCT_PRICE_QUERY = ".priceFirstRow";
     public static final String PRODUCT_PPU_QUERY = ".priceSecondRow";
+    public static final String PRODUCT_DISCOUNT_QUERY = ".priceWasRows";
 
 }

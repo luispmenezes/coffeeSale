@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.luispmenezes.coffeesale.scrapper.GlobalConstants.DEFAULT_COFFEE_BRAND;
 
-public class PriceScrapper implements GenericScrapper {
+public class ContinenteScrapper implements GenericScrapper {
 
     public List<Listing> getListingsDefault() throws IOException {
         return getListings(GlobalConstants.DEFAULT_COFFEE_LIST, DEFAULT_COFFEE_BRAND);
@@ -30,12 +30,14 @@ public class PriceScrapper implements GenericScrapper {
             Elements productList = document.select(Constants.PRODUCT_DIV_QUERY);
 
             for(Element product: productList){
-                String title = product.selectFirst(Constants.PRODUCT_TITLE_QUERY).text();
+                String title = product.selectFirst(Constants.PRODUCT_TITLE_QUERY).selectFirst("img").attr("alt");
                 String URL = product.selectFirst(Constants.PRODUCT_TITLE_QUERY).attr("href");
-                float price = Float.parseFloat(product.selectFirst(Constants.PRODUCT_PRICE_QUERY).text().substring(2));
-                float PPU = Float.parseFloat(product.selectFirst(Constants.PRODUCT_PPU_QUERY).text().substring(2));
+                URL = URL.substring(0,URL.indexOf("("));
+                float price = getPriceAsFloat(product.selectFirst(Constants.PRODUCT_PRICE_QUERY).text());
+                float PPU = getPriceAsFloat(product.selectFirst(Constants.PRODUCT_PPU_QUERY).text());
+                boolean onSale = !product.select(Constants.PRODUCT_DISCOUNT_QUERY).isEmpty();
 
-                Listing listing = new Listing(title,price,PPU,Constants.STORE_NAME,URL);
+                Listing listing = new Listing(title,price,PPU,Constants.STORE_NAME,URL,onSale);
 
                 listingList.add(listing);
             }
@@ -44,5 +46,12 @@ public class PriceScrapper implements GenericScrapper {
 
         return listingList;
     }
+
+    private float getPriceAsFloat(String priceStr){
+        priceStr = priceStr.substring(2,priceStr.lastIndexOf(" "));
+        priceStr = priceStr.replace(",",".");
+        return Float.parseFloat(priceStr);
+    }
+
 
 }
