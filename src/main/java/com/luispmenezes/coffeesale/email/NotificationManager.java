@@ -2,6 +2,7 @@ package com.luispmenezes.coffeesale.email;
 
 import com.luispmenezes.coffeesale.Main;
 import com.luispmenezes.coffeesale.scrapper.GlobalConstants;
+import com.luispmenezes.coffeesale.scrapper.model.Listing;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -9,6 +10,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 public class NotificationManager {
@@ -39,6 +41,14 @@ public class NotificationManager {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public static String emailBodyFormmater(List<Listing> listing){
+        String body = "";
+
+
+        return body;
     }
 
 }

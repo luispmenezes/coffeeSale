@@ -9,6 +9,7 @@ import com.luispmenezes.coffeesale.scrapper.model.Listing;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -28,10 +29,23 @@ public class Main {
             List<Listing> listingContinente = continenteScrapper.getListingsDefault();
             List<Listing> listingJumbo = jumboScrapper.getListingsDefault();
 
-            NotificationManager.sendMail("Coffee Sale Report", listingContinente+"/n"+listingJumbo);
+            List<Listing> listings = new ArrayList<>();
+            listings.addAll(listingContinente);
+            listings.addAll(listingJumbo);
 
-            System.out.println(listingContinente);
-            System.out.println(listingJumbo);
+            for(Listing l: listings){
+                if(l.getPricePerUnit() > Float.valueOf(properties.getProperty("price.threshold"))){
+                    listings.remove(l);
+                }
+            }
+
+            if(listings.size() > 0){
+                NotificationManager.sendMail("Coffee Sale Report", NotificationManager.emailBodyFormmater(listings));
+                System.out.println(listings);
+            }else{
+                System.out.println("No sales detected :(");
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
